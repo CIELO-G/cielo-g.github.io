@@ -18,6 +18,18 @@
 	   scrollbar-gutter: stable;
    }
 
+	/* Prevent awkward word breaks */
+	body {
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		hyphens: none;
+	}
+
+	p, li, div {
+		word-break: normal;
+		overflow-wrap: break-word;
+	}
+
 	:target {
 		scroll-margin-block: 5ex;
 	}
