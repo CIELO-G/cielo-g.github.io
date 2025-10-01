@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Pagination from "@/components/Paginator.astro";
+import PostPreview from "@/components/blog/PostPreview.astro";
+import { getAllPosts, groupPostsByTopic } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+import type { GetStaticPaths, Page } from "astro";
+import { Icon } from "astro-icon/components";
+
+export const getStaticPaths = (async ({ paginate }) => {
+	const MAX_POSTS_PER_PAGE = 10;
+	const allPosts = await getAllPosts();
+	return paginate(allPosts, {
+		pageSize: MAX_POSTS_PER_PAGE,
+	});
+}) satisfies GetStaticPaths;
+
+interface Props {
+	page: Page<CollectionEntry<"courses">>;
+}
+
+const { page } = Astro.props;
+
+const meta = {
+	description: "Browse our collection of courses and learning content",
+	title: "Courses",
+};
+
+const paginationProps = {
+	...(page.url.prev && {
+		prevUrl: {
+			text: "← Previous Page",
+			url: page.url.prev,
+		},
+	}),
+	...(page.url.next && {
+		nextUrl: {
+			text: "Next Page →",
+			url: page.url.next,
+		},
+	}),
+};
+
+const groupedByTopic = groupPostsByTopic(page.data);
+const topicKeys = Object.keys(groupedByTopic);
+---
+
+<PageLayout meta={meta}>
+	<div class="mb-6 flex items-center gap-3">
+		<h1 class="title">Courses</h1>
+		<a class="text-accent" href="/rss.xml" target="_blank">
+			<span class="sr-only">RSS feed</span>
+			<Icon aria-hidden="true" class="h-6 w-6" focusable="false" name="mdi:rss" />
+		</a>
+	</div>
+	<div class="grid sm:grid-cols-[3fr_1fr] sm:gap-x-8 sm:gap-y-16">
+		<div>
+			{
+				topicKeys.map((topicKey) => (
+					<section aria-labelledby={`topic-${topicKey}`}>
+						<h2 id={`topic-${topicKey}`} class="title text-lg">
+							<span class="sr-only">Courses in topic</span>
+							{topicKey}
+						</h2>
+						<ul class="mt-5 mb-12 space-y-6 text-start">
+							{groupedByTopic[topicKey]?.map((p) => (
+								<li class="grid gap-2 sm:grid-cols-[auto_1fr] sm:[&_q]:col-start-2">
+									<PostPreview post={p} />
+								</li>
+							))}
+						</ul>
+					</section>
+				))
+			}
+			<Pagination {...paginationProps} />
+		</div>
+	</div>
+</PageLayout>

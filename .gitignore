@@ -1,0 +1,48 @@
+# build output
+dist/
+.output/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# misc
+*.pem
+.cache
+.astro
+.vscode/
+.idea/
+.history/
+Thumbs.db
+ehthumbs.db
+*.log
+.env.local
+.env.*.local
+.code-workspace
+arthifact_website.code-workspace
+.prettierrc.js
+.prettierignore
+biome.json
+
+# IDE/editor folders
+.vscode/
+.idea/
+.history/
+
+# System files
+Thumbs.db
+ehthumbs.db
+.DS_Store

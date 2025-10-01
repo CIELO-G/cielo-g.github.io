@@ -1,0 +1,65 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import PostPreview from "@/components/blog/PostPreview.astro";
+import Note from "@/components/note/Note.astro";
+import { getAllPosts } from "@/data/post";
+import PageLayout from "@/layouts/Base.astro";
+
+// Posts
+const MAX_POSTS = 3;
+const allPosts = await getAllPosts();
+const allPostsByDate = allPosts.slice(0, MAX_POSTS) as CollectionEntry<"courses">[];
+
+// Notes
+const MAX_NOTES = 2;
+const allNotes = await getCollection("note");
+const latestNotes = allNotes
+	.sort((a, b) => {
+		const orderA = parseInt(a.data.order) || 999;
+		const orderB = parseInt(b.data.order) || 999;
+		return orderA - orderB;
+	})
+	.slice(0, MAX_NOTES);
+---
+
+<PageLayout meta={{ title: "Home" }}>
+	<section>
+		<h1 class="text-xl font-semibold mb-4 text-accent">Interactive Earth Science Education</h1>
+		<p class="mb-4">
+			Learn Earth Science through engaging, gamified experiences. Explore interactive courses 
+			that transform complex concepts into memorable adventures with storytelling, challenges, 
+			and hands-on activities.
+		</p>
+		<p class="mb-4">
+			Start your Earth Science journey. Discover our planet. Master the concepts.
+		</p>
+	</section>
+	<section class="mt-12">
+		<h2 class="title text-accent mb-6 text-xl"><a href="/courses/">Latest Courses</a></h2>
+		<ul class="space-y-6" role="list">
+			{
+				allPostsByDate.map((p) => (
+					<li class="grid gap-2 sm:grid-cols-[auto_1fr]">
+						<PostPreview post={p} />
+					</li>
+				))
+			}
+		</ul>
+	</section>
+	{
+		latestNotes.length > 0 && (
+			<section class="mt-12">
+				<h2 class="title text-accent mb-6 text-xl">
+					<a href="/notes/">Notes</a>
+				</h2>
+				<ul class="space-y-6" role="list">
+					{latestNotes.map((note) => (
+						<li>
+							<Note note={note} as="h3" isPreview />
+						</li>
+					))}
+				</ul>
+			</section>
+		)
+	}
+</PageLayout>

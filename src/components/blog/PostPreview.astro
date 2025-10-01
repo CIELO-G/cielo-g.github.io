@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { HTMLTag, Polymorphic } from "astro/types";
+
+type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag }> & {
+	post: CollectionEntry<"courses">;
+	withDesc?: boolean;
+};
+
+const { as: Tag = "div", post, withDesc = false } = Astro.props;
+
+// Create safe URL
+const postUrl = `/courses/${String(post.id)}`;
+---
+
+<div class="flex items-center gap-4">
+	{post.data.thumbnail ? (
+		<div class="flex-shrink-0">
+			<img 
+				src={post.data.thumbnail.src.src}
+				alt={post.data.thumbnail.alt}
+				class="w-12 h-12 object-cover rounded border border-gray-200 dark:border-gray-700"
+				width={48}
+				height={48}
+			/>
+		</div>
+	) : (
+		<div class="flex-shrink-0 w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-700 flex items-center justify-center">
+			<span class="text-gray-400 dark:text-gray-600 text-xs">IMG</span>
+		</div>
+	)}
+	
+	<div class="flex-1 min-w-0">
+		<Tag>
+			{post.data.draft && <span class="text-red-500">(Draft) </span>}
+			<a class="cactus-link" data-astro-prefetch href={postUrl}>
+				{post.data.title}
+			</a>
+		</Tag>
+		{withDesc && <q class="line-clamp-3 italic text-sm text-gray-600 dark:text-gray-400 mt-1">{post.data.description}</q>}
+	</div>
+</div>
