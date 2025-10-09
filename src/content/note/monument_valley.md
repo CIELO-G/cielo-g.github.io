@@ -1,7 +1,7 @@
 ---
 title: "Monument Valley Majesty"
 description: "A glimpse into the timeless beauty of the Navajo Tribal Park’s iconic sandstone buttes."
-order: "1"
+order: "2"
 ---
 
 Monument Valley Navajo Tribal Park, located on the border of Arizona and Utah, is one of the most iconic landscapes of the American Southwest. The towering sandstone buttes rise majestically from the desert floor, creating breathtaking views that have been featured in countless films and photographs.  
