@@ -5,5 +5,3 @@ order: "1"
 ---
 
 ![Monument Valley](./images/The%20Great%20ShakeOut%202025-1.png)
-
-Photo by: Cayetano Gil (2018)
